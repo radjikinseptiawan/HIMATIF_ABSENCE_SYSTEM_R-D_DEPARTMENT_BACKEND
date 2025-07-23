@@ -1,0 +1,1 @@
+https://medium.com/@developerwhoismean/nestjs-episode-2-generate-all-resources-with-one-command-ce0bd1f9c926

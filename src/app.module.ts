@@ -8,6 +8,7 @@ import { LoginModule } from './login/login.module';
 import { HashService } from './hash/hash.service';
 // import { HashModule } from './hash/hash.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { AbsenceModule } from './absence/absence.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     SupabaseModule,
     LoginModule,
     DashboardModule,
+    AbsenceModule,
     // HashModule,
   ],
   controllers: [AppController],

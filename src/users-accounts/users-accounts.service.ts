@@ -26,6 +26,7 @@ export class UsersAccountsService {
         phone,
         address,
         role,
+        departement,
         birth_date,
         username,
       } = createUsersAccountDto;
@@ -38,7 +39,7 @@ export class UsersAccountsService {
 
       if (authError) {
         throw new HttpException(
-          `Failed add account, ${authError}`,
+          `Failed add account, ${authError.message}`,
           HttpStatus.BAD_REQUEST,
         );
       }
@@ -63,6 +64,7 @@ export class UsersAccountsService {
             phone,
             address,
             role,
+            departement,
             birth_date: new Date(birth_date).toISOString().split('T')[0],
           },
         ]);

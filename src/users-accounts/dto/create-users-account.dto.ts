@@ -8,4 +8,5 @@ export class CreateUsersAccountDto {
   address: string;
   role: string;
   birth_date: Date;
+  departement: string;
 }

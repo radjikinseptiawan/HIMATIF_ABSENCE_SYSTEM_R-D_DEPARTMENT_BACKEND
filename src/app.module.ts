@@ -24,7 +24,6 @@ import { RapatModule } from './rapat/rapat.module';
     ProgramkerjaModule,
     AnggotaModule,
     RapatModule,
-    // HashModule,
   ],
   controllers: [AppController],
   providers: [AppService, HashService],

@@ -9,14 +9,14 @@ export class RapatService {
   constructor(private readonly supabaseService: SupabaseService) {}
 
   async create(createRapatDto: CreateRapatDto) {
-    const { judul, deskripsi, tempat, tanggal, waktu_mulai, waktu_selesai } =
+    const { judul, notes, tempat, tanggal, waktu_mulai, waktu_selesai } =
       createRapatDto;
 
     const { data, error } = await this.supabaseService.client
       .from('rapat')
       .insert({
         judul,
-        deskripsi,
+        notes,
         tempat,
         tanggal,
         waktu_mulai,

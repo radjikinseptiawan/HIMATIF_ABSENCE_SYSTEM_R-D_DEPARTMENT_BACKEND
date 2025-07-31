@@ -12,6 +12,7 @@ import { AbsenceModule } from './absence/absence.module';
 import { ProgramkerjaModule } from './programkerja/programkerja.module';
 import { AnggotaModule } from './anggota/anggota.module';
 import { RapatModule } from './rapat/rapat.module';
+import { NotulensiUploadModule } from './notulensi-upload/notulensi-upload.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { RapatModule } from './rapat/rapat.module';
     ProgramkerjaModule,
     AnggotaModule,
     RapatModule,
+    NotulensiUploadModule,
   ],
   controllers: [AppController],
   providers: [AppService, HashService],

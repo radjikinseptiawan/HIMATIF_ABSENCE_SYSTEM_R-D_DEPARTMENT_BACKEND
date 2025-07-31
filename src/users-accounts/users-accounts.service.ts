@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-base-to-string */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
@@ -110,7 +108,38 @@ export class UsersAccountsService {
     return `This action returns a #${id} usersAccount`;
   }
 
-  update(id: number, updateUsersAccountDto: UpdateUsersAccountDto) {
+  async update(id: string, updateUsersAccountDto: UpdateUsersAccountDto) {
+    const {
+      fullname,
+      username,
+      email,
+      password,
+      gender,
+      phone,
+      address,
+      role,
+      birth_date,
+      departement,
+      user_id,
+      photoProfile,
+    } = updateUsersAccountDto;
+
+    const { data, error } = await this.supabaseService.client
+      .from('profile')
+      .update({
+        fullname,
+        username,
+        email,
+        password,
+        gender,
+        phone,
+        address,
+        role,
+        birth_date,
+        departement,
+        photoProfile,
+      })
+      .eq('id', user_id);
     return `This action updates a #${id} usersAccount`;
   }
 

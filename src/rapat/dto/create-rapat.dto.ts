@@ -1,6 +1,6 @@
 export class CreateRapatDto {
   judul: string;
-  deskripsi: string;
+  notes: string;
   tanggal: Date;
   waktu_mulai: string;
   waktu_selesai: string;

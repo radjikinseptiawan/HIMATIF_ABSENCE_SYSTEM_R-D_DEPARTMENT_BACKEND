@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateProgramkerjaDto } from './dto/create-programkerja.dto';
 import { UpdateProgramkerjaDto } from './dto/update-programkerja.dto';
@@ -14,6 +15,7 @@ export class ProgramkerjaService {
       sekertaris_pelaksana2,
       bendahara_pelaksana,
       bendahara_pelaksana2,
+      notulensi_rapat,
       status,
       tanggal_pelaksanaan,
       nama_program,
@@ -28,6 +30,7 @@ export class ProgramkerjaService {
         bendahara_pelaksana,
         bendahara_pelaksana2,
         status,
+        notulensi_rapat,
         tanggal_pelaksanaan,
         nama_program,
       });

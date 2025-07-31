@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { RapatService } from './rapat.service';
 import { CreateRapatDto } from './dto/create-rapat.dto';
 import { UpdateRapatDto } from './dto/update-rapat.dto';

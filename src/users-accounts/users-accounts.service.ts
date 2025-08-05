@@ -95,13 +95,15 @@ export class UsersAccountsService {
 
   async findAll() {
     const { data, error } = await this.supabaseService.client
-      .from('anggota')
+      .from('profile')
       .select();
 
     if (error) {
       throw new HttpException('Failed to show data', HttpStatus.BAD_REQUEST);
     }
-    return `This action returns all usersAccounts ${data?.toString()}`;
+    return {
+      data,
+    };
   }
 
   findOne(id: number) {

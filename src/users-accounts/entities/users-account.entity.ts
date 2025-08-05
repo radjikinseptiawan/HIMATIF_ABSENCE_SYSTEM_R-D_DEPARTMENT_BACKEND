@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -29,4 +28,7 @@ export class UsersAccount {
 
   @Column()
   role: string;
+
+  @Column({ type: 'bytea', nullable: true })
+  photoProfile: Buffer;
 }

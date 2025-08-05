@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUsersAccountDto } from './dto/create-users-account.dto';
 import { UpdateUsersAccountDto } from './dto/update-users-account.dto';
@@ -9,6 +11,7 @@ import { HashService } from 'src/hash/hash.service';
 
 @Injectable()
 export class UsersAccountsService {
+  findbyId: any;
   constructor(
     private supabaseService: SupabaseService,
     private hashService: HashService,
@@ -96,21 +99,87 @@ export class UsersAccountsService {
   async findAll() {
     const { data, error } = await this.supabaseService.client
       .from('profile')
-      .select();
+      .select(' * ');
 
-    if (error) {
-      throw new HttpException('Failed to show data', HttpStatus.BAD_REQUEST);
+    if (error || !data) {
+      throw new HttpException(
+        'Not have an user accounts!',
+        HttpStatus.NOT_FOUND,
+      );
     }
+    const users = data.map((user) => {
+      if (user.photoProfile) {
+        try {
+          if (typeof user.photoProfile === 'string') {
+            const parsed = JSON.parse(user.photoProfile);
+            if (parsed?.data && Array.isArray(parsed.data)) {
+              user.photoProfile = Buffer.from(parsed.data);
+            } else if (
+              typeof user.photoProfile === 'object' &&
+              Array.isArray(user.photoProfile.data)
+            ) {
+              user.photoProfile = Buffer.from(user.photoProfile.data);
+            }
+          }
+        } catch (error) {
+          console.error(
+            'Failed to parse photoProfile for user: ',
+            user.user_id,
+          );
+          user.photoProfile = null;
+        }
+      }
+    });
     return {
       data,
     };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} usersAccount`;
+  async findOne(id: string) {
+    const { data, error } = await this.supabaseService.client
+      .from('profile')
+      .select('*')
+      .eq('user_id', id)
+      .single();
+
+    if (error || !data) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    // ✅ Fix: handle photoProfile buffer decode
+    if (data.photoProfile) {
+      try {
+        // Jika disimpan dalam format string JSON
+        if (typeof data.photoProfile === 'string') {
+          const parsed = JSON.parse(data.photoProfile);
+          if (parsed?.data && Array.isArray(parsed.data)) {
+            data.photoProfile = Buffer.from(parsed.data);
+          }
+        }
+
+        // Jika sudah object (misalnya Supabase langsung parsing)
+        else if (
+          typeof data.photoProfile === 'object' &&
+          Array.isArray(data.photoProfile.data)
+        ) {
+          data.photoProfile = Buffer.from(data.photoProfile.data);
+        }
+      } catch (err) {
+        console.error('Error parsing photoProfile buffer:', err);
+        data.photoProfile = null;
+      }
+    }
+
+    return {
+      data,
+    };
   }
 
-  async update(id: string, updateUsersAccountDto: UpdateUsersAccountDto) {
+  async update(
+    id: string,
+    updateUsersAccountDto: UpdateUsersAccountDto,
+    file: Express.Multer.File,
+  ) {
     const {
       fullname,
       username,
@@ -122,10 +191,7 @@ export class UsersAccountsService {
       role,
       birth_date,
       departement,
-      user_id,
-      photoProfile,
     } = updateUsersAccountDto;
-
     const { data, error } = await this.supabaseService.client
       .from('profile')
       .update({
@@ -139,10 +205,25 @@ export class UsersAccountsService {
         role,
         birth_date,
         departement,
-        photoProfile,
+        photoProfile: updateUsersAccountDto.photoProfile?.toJSON(),
       })
-      .eq('id', user_id);
-    return `This action updates a #${id} usersAccount`;
+      .eq('user_id', id);
+    if (error) {
+      throw new HttpException(
+        { message: 'Failed to update user', error },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    console.log('Buffer type:', typeof updateUsersAccountDto.photoProfile); // HARUS object
+    console.log(
+      'Is Buffer?',
+      Buffer.isBuffer(updateUsersAccountDto.photoProfile),
+    ); // HARUS true
+    console.log('Length:', updateUsersAccountDto.photoProfile?.length); // HARUS > 0
+
+    return {
+      data,
+    };
   }
 
   remove(id: number) {

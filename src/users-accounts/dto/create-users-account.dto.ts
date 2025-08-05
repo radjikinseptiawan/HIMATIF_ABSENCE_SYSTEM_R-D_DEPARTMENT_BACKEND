@@ -9,5 +9,4 @@ export class CreateUsersAccountDto {
   role: string;
   birth_date: Date;
   departement: string;
-  photoProfile: File | Buffer | null | string | URL;
 }

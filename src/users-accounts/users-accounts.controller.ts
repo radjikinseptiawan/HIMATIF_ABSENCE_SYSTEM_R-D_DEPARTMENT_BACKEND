@@ -12,7 +12,6 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
-  Put,
   Res,
 } from '@nestjs/common';
 import { UsersAccountsService } from './users-accounts.service';

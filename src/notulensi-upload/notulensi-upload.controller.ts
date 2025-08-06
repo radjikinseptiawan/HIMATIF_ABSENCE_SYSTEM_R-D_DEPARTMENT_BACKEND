@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
@@ -53,12 +54,31 @@ export class NotulensiUploadController {
       return res.status(404).send('Notulensi tidak ditemukan');
     }
     const { notulensi_rapat } = data;
-    const buffer = Buffer.from(notulensi_rapat);
+
+    let buffer: Buffer;
+    if (
+      typeof notulensi_rapat === 'object' &&
+      notulensi_rapat !== null &&
+      'type' in notulensi_rapat &&
+      notulensi_rapat.type == 'Buffer'
+    ) {
+      buffer = Buffer.from(notulensi_rapat.data);
+    } else if (typeof notulensi_rapat === 'string') {
+      buffer = Buffer.from(notulensi_rapat, 'base64');
+    } else if (notulensi_rapat instanceof Uint8Array) {
+      buffer = Buffer.from(notulensi_rapat);
+    } else {
+      return res.status(500).send('format file tidak dikenal');
+    }
+
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
       `attachment; filename=notulensi-${id}.pdf`,
     );
+
+    console.log(typeof buffer);
+
     return res.send(buffer);
   }
 

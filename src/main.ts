@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: 'https://himatif-absence-system-r-d-departme-nu.vercel.app/',
     credentials: true,
   });
   await app.listen(process.env.PORT ?? 3001);
